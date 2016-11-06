@@ -1,0 +1,60 @@
+
+</head>
+<body>
+<% if signed_in? or doctorsigned_in? or nursesigned_in? %>
+	<h1>Listing prescriptions</h1>
+
+	<table class="table table-hover">
+	  <thead>
+		<tr>
+		  <th>Prescription details</th>
+		  <th>Prescription date</th>
+		  <th>Patient</th>
+		  <th>Doctor</th>
+		  <th colspan="3"></th>
+		</tr>
+	  </thead>
+
+	  <tbody>
+	<% @prescriptions.each do |prescription| %>
+		<% if (signed_in? and prescription.patient_id == @current_patient.id) %>	
+			 <tr>
+			   <td><%= prescription.prescription_details %></td>
+			   <td><%= prescription.prescription_date %></td>
+			   <td><%= prescription.patient.email %></td>
+			   <td><%= prescription.doctor.name %></td>
+			</tr>
+		<% end %>
+		<% if doctorsigned_in? %>
+			<tr>
+			   <td><%= prescription.prescription_details %></td>
+			   <td><%= prescription.prescription_date %></td>
+			   <td><%= prescription.patient.email %></td>
+			   <td><%= prescription.doctor.name %></td>
+				<td><%= link_to 'Show', prescription %></td>
+				<td><%= link_to 'Edit', edit_prescription_path(prescription) %></td>
+				<td><%= link_to 'Destroy', prescription, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+			  </tr>
+		<% end %>
+		<% if nursesigned_in? %>
+			<tr>
+			   <td><%= prescription.prescription_details %></td>
+			   <td><%= prescription.prescription_date %></td>
+			   <td><%= prescription.patient.email %></td>
+			   <td><%= prescription.doctor.name %></td>
+				<td><%= link_to 'Show', prescription %></td>
+				
+				<td><%= link_to 'Destroy', prescription, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+		<% end %>
+		
+	<% end %>
+
+  </tbody>
+</table>
+<br>
+<% if doctorsigned_in? %>
+<%= link_to 'New Prescription', new_prescription_path, :class=>'btn btn-success' %>
+<% end %>
+<% else %>
+	<%= link_to 'Please login ', login_path, :class=>'btn btn-success' %>
+<% end %>
